@@ -26,10 +26,14 @@
     "rules": {
       "recommended": true,
       "suspicious": {
-        "noUnknownAtRules": "off"
+        "noUnknownAtRules": "off",
+        "noAssignInExpressions": "off"
       },
       "performance": {
         "noNamespaceImport": "off"
+      },
+      "style": {
+        "useBlockStatements": "off"
       }
     },
     "domains": {
