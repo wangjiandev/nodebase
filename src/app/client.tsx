@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,8 +19,16 @@ const Client = () => {
   const { data } = useQuery(trpc.getWorkflows.queryOptions());
   const create = useMutation(
     trpc.createWorkflow.mutationOptions({
-      onSuccess: () => {
+      onSuccess: ({ message }) => {
         queryClient.invalidateQueries(trpc.getWorkflows.queryOptions());
+        toast.success(message);
+      },
+    })
+  );
+  const textAi = useMutation(
+    trpc.textAi.mutationOptions({
+      onSuccess: ({ text }) => {
+        toast.success(text);
       },
     })
   );
@@ -35,6 +44,9 @@ const Client = () => {
       <CardFooter>
         <Button disabled={create.isPending} onClick={() => create.mutate()}>
           Create Workflow
+        </Button>
+        <Button disabled={textAi.isPending} onClick={() => textAi.mutate()}>
+          textAi
         </Button>
       </CardFooter>
     </Card>
