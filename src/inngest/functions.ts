@@ -1,23 +1,24 @@
-import prisma from "@/lib/db";
+import { createDeepSeek } from "@ai-sdk/deepseek";
+import { generateText } from "ai";
 import { inngest } from "./client";
 
-export const helloWorld = inngest.createFunction(
-  { id: "hello-world" },
-  { event: "test/hello.world" },
-  async ({ step }) => {
-    // Simulate Fetching the videos
-    await step.sleep("Fetching-a-videos", "5s");
-    // Transcribing the videos
-    await step.sleep("Transcribing-a-videos", "5s");
-    // Sending transcription to openAI
-    await step.sleep("Sending-to-openAI", "5s");
+const deepseek = createDeepSeek({
+  apiKey: process.env.DEEPSEEK_API_KEY ?? "",
+});
 
-    await step.run("create-workflow", async () =>
-      prisma.workflow.create({
-        data: {
-          name: "test-workflow",
-        },
-      })
+export const execute = inngest.createFunction(
+  { id: "execute" },
+  { event: "execute/ai" },
+  async ({ step }) => {
+    const { steps } = await step.ai.wrap(
+      "deepseek-generate-text",
+      generateText,
+      {
+        model: deepseek("deepseek-chat"),
+        system: "You are a helpful assistant.",
+        prompt: "What is 2+2 ?",
+      }
     );
+    return steps;
   }
 );

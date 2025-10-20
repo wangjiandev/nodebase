@@ -27,8 +27,8 @@ const Client = () => {
   );
   const textAi = useMutation(
     trpc.textAi.mutationOptions({
-      onSuccess: ({ text }) => {
-        toast.success(text);
+      onSuccess: ({ message }) => {
+        toast.success(message);
       },
     })
   );

@@ -1,16 +1,16 @@
-import { deepseek } from "@ai-sdk/deepseek";
-import { generateText } from "ai";
 import { inngest } from "@/inngest/client";
 import prisma from "@/lib/db";
 import { createTRPCRouter, protectedProcedure } from "../init";
 
 export const appRouter = createTRPCRouter({
   textAi: protectedProcedure.mutation(async () => {
-    const { text } = await generateText({
-      model: deepseek("deepseek-chat"),
-      prompt: "Write a vegetarian lasagna recipe for 4 people.",
+    await inngest.send({
+      name: "execute/ai",
     });
-    return { text };
+    return {
+      success: true,
+      message: "textAi sender to executed squeued",
+    };
   }),
   getWorkflows: protectedProcedure.query(
     async () => await prisma.workflow.findMany()
