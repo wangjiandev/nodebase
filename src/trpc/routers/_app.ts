@@ -1,8 +1,17 @@
 import prisma from "@/lib/db";
-import { baseProcedure, createTRPCRouter } from "../init";
+import { createTRPCRouter, protectedProcedure } from "../init";
 
 export const appRouter = createTRPCRouter({
-  getUsers: baseProcedure.query(async () => await prisma.user.findMany()),
+  getWorkflows: protectedProcedure.query(
+    async () => await prisma.workflow.findMany()
+  ),
+  createWorkflow: protectedProcedure.mutation(async () =>
+    prisma.workflow.create({
+      data: {
+        name: "test-workflow",
+      },
+    })
+  ),
 });
 
 // export type definition of API
