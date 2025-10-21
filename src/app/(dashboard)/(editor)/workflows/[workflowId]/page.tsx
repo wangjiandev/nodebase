@@ -1,10 +1,10 @@
 type PageProps = {
-  params: Promise<{ credentialId: string }>;
+  params: Promise<{ workflowId: string }>;
 };
 
 const Page = async ({ params }: PageProps) => {
-  const { credentialId } = await params;
-  return <div>Credential ID: {credentialId}</div>;
+  const { workflowId } = await params;
+  return <div>Workflow ID: {workflowId}</div>;
 };
 
 export default Page;
