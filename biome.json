@@ -30,16 +30,25 @@
         "noAssignInExpressions": "off"
       },
       "performance": {
-        "noNamespaceImport": "off"
+        "noNamespaceImport": "off",
+        "noImgElement": "off"
+      },
+      "complexity": {
+        "noUselessFragments": "off"
       },
       "style": {
-        "useBlockStatements": "off"
+        "useBlockStatements": "off",
+        "noMagicNumbers": "off"
       },
       "nursery": {
-        "noReactForwardRef": "off"
+        "noReactForwardRef": "off",
+        "useImageSize": "off"
       },
       "a11y": {
-        "noNoninteractiveTabindex": "off"
+        "noNoninteractiveTabindex": "off",
+        "noStaticElementInteractions": "off",
+        "useKeyWithClickEvents": "off",
+        "noNoninteractiveElementInteractions": "off"
       }
     },
     "domains": {
