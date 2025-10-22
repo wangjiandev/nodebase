@@ -34,6 +34,12 @@
       },
       "style": {
         "useBlockStatements": "off"
+      },
+      "nursery": {
+        "noReactForwardRef": "off"
+      },
+      "a11y": {
+        "noNoninteractiveTabindex": "off"
       }
     },
     "domains": {
