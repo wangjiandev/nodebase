@@ -1,3 +1,4 @@
+import { Provider } from "jotai";
 import type { Metadata } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "@/components/ui/sonner";
@@ -20,8 +21,10 @@ export default function RootLayout({
       <body className={"antialiased"}>
         <TRPCReactProvider>
           <NuqsAdapter>
-            {children}
-            <Toaster />
+            <Provider>
+              {children}
+              <Toaster />
+            </Provider>
           </NuqsAdapter>
         </TRPCReactProvider>
       </body>

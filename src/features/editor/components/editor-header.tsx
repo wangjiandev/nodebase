@@ -1,5 +1,6 @@
 "use client";
 
+import { useAtomValue } from "jotai";
 import { SaveIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -16,8 +17,10 @@ import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   useSuspenseWorkflow,
+  useUpdateWorkflow,
   useUpdateWorkflowName,
 } from "@/features/workflows/hooks/use-workflows";
+import { editorAtom } from "../store/atoms";
 
 export const EditorBreadcrumb = ({ workflowId }: { workflowId: string }) => (
   <Breadcrumb>
@@ -31,14 +34,30 @@ export const EditorBreadcrumb = ({ workflowId }: { workflowId: string }) => (
   </Breadcrumb>
 );
 
-export const EditorSaveButton = () => (
-  <div className="ml-auto">
-    <Button size="sm" variant="ghost">
-      <SaveIcon className="size-4" />
-      Save
-    </Button>
-  </div>
-);
+export const EditorSaveButton = ({ workflowId }: { workflowId: string }) => {
+  const editor = useAtomValue(editorAtom);
+  const updateWorkflow = useUpdateWorkflow();
+
+  const handleSave = async () => {
+    if (!editor) return;
+    const nodes = editor.getNodes();
+    const edges = editor.getEdges();
+    await updateWorkflow.mutateAsync({ id: workflowId, nodes, edges });
+  };
+
+  return (
+    <div className="ml-auto">
+      <Button
+        disabled={updateWorkflow.isPending}
+        onClick={handleSave}
+        size="sm"
+      >
+        <SaveIcon className="size-4" />
+        Save
+      </Button>
+    </div>
+  );
+};
 
 export const EditorNameInput = ({ workflowId }: { workflowId: string }) => {
   const { data } = useSuspenseWorkflow(workflowId);
@@ -118,7 +137,7 @@ export const EditorHeader = ({ workflowId }: { workflowId: string }) => (
     <SidebarTrigger />
     <div className="flex h-full w-full flex-row items-center justify-between gap-x-4">
       <EditorBreadcrumb workflowId={workflowId} />
-      <EditorSaveButton />
+      <EditorSaveButton workflowId={workflowId} />
     </div>
   </header>
 );

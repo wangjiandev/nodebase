@@ -86,3 +86,26 @@ export const useUpdateWorkflowName = () => {
     })
   );
 };
+
+/**
+ * Hook to update workflow.
+ */
+export const useUpdateWorkflow = () => {
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+
+  return useMutation(
+    trpc.workflows.update.mutationOptions({
+      onSuccess: (data) => {
+        toast.success(`Workflow ${data.name} Saved`);
+        queryClient.invalidateQueries(trpc.workflows.getAll.queryOptions({}));
+        queryClient.invalidateQueries(
+          trpc.workflows.getById.queryFilter({ id: data.id })
+        );
+      },
+      onError: () => {
+        toast.error("Failed to save workflow");
+      },
+    })
+  );
+};

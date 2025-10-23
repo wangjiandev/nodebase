@@ -1,9 +1,10 @@
 "use client";
 
-import type { Node, NodeProps } from "@xyflow/react";
+import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
 import { GlobeIcon } from "lucide-react";
-import { memo } from "react";
+import { memo, useState } from "react";
 import { BaseExecutionNode } from "@/features/executions/components/base-execution-node";
+import { HttpRequestDialog, type HttpRequestValues } from "./dialog";
 
 type HttpRequestNodeData = {
   endpoint?: string;
@@ -15,21 +16,57 @@ type HttpRequestNodeData = {
 type HttpRequestNodeType = Node<HttpRequestNodeData>;
 
 export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
-  const nodeData = props.data as HttpRequestNodeData;
+  const [open, setOpen] = useState(false);
+  const { setNodes } = useReactFlow();
+  const nodeData = props.data;
+  const nodeStatus = "initial";
   const description = nodeData?.endpoint
-    ? `${nodeData.method || "GET"} ${nodeData.endpoint}`
+    ? `${nodeData.method || "GET"}: ${nodeData.endpoint}`
     : "Not configured";
+
+  const handleOpenSettings = () => {
+    setOpen(true);
+  };
+
+  const handleSubmit = (values: HttpRequestValues) => {
+    setNodes((nodes) => {
+      const updatedNodes = nodes.map((node) => {
+        if (node.id === props.id) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              endpoint: values.endpoint,
+              method: values.method,
+              body: values.body,
+            },
+          };
+        }
+        return node;
+      });
+      return updatedNodes;
+    });
+  };
 
   return (
     <>
+      <HttpRequestDialog
+        defaultBody={nodeData.body}
+        defaultEndpoint={nodeData.endpoint}
+        defaultMethod={nodeData.method}
+        onOpenChange={setOpen}
+        onSubmit={handleSubmit}
+        open={open}
+      />
       <BaseExecutionNode
         {...props}
         description={description}
         icon={GlobeIcon}
         id={props.id}
         name="HTTP Request"
-        onDoubleClick={() => {}}
-        onSettings={() => {}}
+        onDoubleClick={handleOpenSettings}
+        onSettings={handleOpenSettings}
+        status={nodeStatus}
       />
     </>
   );
