@@ -46,37 +46,33 @@ type HttpRequestProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (values: HttpRequestValues) => void;
-  defaultEndpoint?: string;
-  defaultMethod?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-  defaultBody?: string;
+  defaultValues: Partial<HttpRequestValues>;
 };
 
 export const HttpRequestDialog = ({
   open,
   onOpenChange,
-  defaultEndpoint,
-  defaultMethod,
-  defaultBody,
   onSubmit,
+  defaultValues = {},
 }: HttpRequestProps) => {
   const form = useForm<HttpRequestValues>({
     resolver: zodResolver(httpRequestSchema),
     defaultValues: {
-      endpoint: defaultEndpoint || "",
-      method: defaultMethod || "GET",
-      body: defaultBody || "",
+      endpoint: defaultValues.endpoint || "",
+      method: defaultValues.method || "GET",
+      body: defaultValues.body || "",
     },
   });
 
   useEffect(() => {
     if (open) {
       form.reset({
-        endpoint: defaultEndpoint,
-        method: defaultMethod,
-        body: defaultBody,
+        endpoint: defaultValues.endpoint || "",
+        method: defaultValues.method || "GET",
+        body: defaultValues.body || "",
       });
     }
-  }, [defaultEndpoint, defaultMethod, defaultBody, form, open]);
+  }, [defaultValues, form, open]);
 
   const watchMethod = form.watch("method");
   const showBody = ["POST", "PUT", "PATCH"].includes(watchMethod);

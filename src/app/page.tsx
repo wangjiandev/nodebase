@@ -1,6 +1,5 @@
 import LogoutButton from "@/components/logout";
 import { requireAuth } from "@/lib/auth-util";
-import Client from "./client";
 
 const Page = async () => {
   const data = await requireAuth();
@@ -10,7 +9,6 @@ const Page = async () => {
         <pre>{JSON.stringify(data, null, 2)}</pre>
       </div>
       <LogoutButton />
-      <Client />
     </div>
   );
 };
