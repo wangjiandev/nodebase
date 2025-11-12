@@ -3,12 +3,33 @@ import { generateSlug } from "random-word-slugs";
 import z from "zod";
 import { PAGINATION } from "@/config/constants";
 import { NodeType } from "@/generated/prisma";
+import { inngest } from "@/inngest/client";
 import prisma from "@/lib/db";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 
 const WORKFLOW_NAME_WORD_COUNT = 3;
 
 export const workflowsRouter = createTRPCRouter({
+  execute: protectedProcedure
+    .input(z.object({ id: z.string("workflow id cannot be empty") }))
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input;
+      const workflow = await prisma.workflow.findUniqueOrThrow({
+        where: {
+          id,
+          userId: ctx.auth.user.id,
+        },
+      });
+
+      await inngest.send({
+        name: "workflows/execute.workflow",
+        data: {
+          workflowId: id,
+        },
+      });
+
+      return workflow;
+    }),
   create: protectedProcedure.mutation(({ ctx }) =>
     prisma.workflow.create({
       data: {
