@@ -7,7 +7,10 @@ import { inngest } from "./client";
 import { topologicalSort } from "./utils";
 
 export const executeWorkflow = inngest.createFunction(
-  { id: "execute-workflow" },
+  {
+    id: "execute-workflow",
+    retries: process.env.NODE_ENV === "production" ? 3 : 0,
+  },
   {
     event: "workflows/execute.workflow",
     channel: [httpRequestChannel(), manualTriggerChannel()],

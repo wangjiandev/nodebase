@@ -35,7 +35,13 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 
 const httpRequestSchema = z.object({
-  variableName: z.string().min(1, "Variable name is required"),
+  variableName: z
+    .string()
+    .min(1, "Variable name is required")
+    .regex(
+      /^[A-Za-z_$][A-Za-z0-9_$]*$/,
+      "Variable name must start with a letter or underscore and contain only letters, numbers, and underscores"
+    ),
   endpoint: z.url("Please enter a valid URL"),
   method: z.enum(["GET", "POST", "PUT", "DELETE", "PATCH"]),
   body: z.string().optional(),
