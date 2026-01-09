@@ -5,7 +5,7 @@ import { useReactFlow } from "@xyflow/react";
 import { GlobeIcon, MousePointerIcon } from "lucide-react";
 import { type ReactNode, useCallback } from "react";
 import { toast } from "sonner";
-import { NodeType } from "@/generated/prisma";
+import { NodeType } from "@/generated/prisma/enums";
 import { Separator } from "./ui/separator";
 import {
   Sheet,
@@ -44,6 +44,12 @@ const executionNodes: NodeTypeOption[] = [
     label: "HTTP Request",
     description: "Makes an HTTP request to a URL",
     icon: GlobeIcon,
+  },
+  {
+    type: NodeType.GEMINI,
+    label: "Gemini",
+    description: "Uses Gemini to generate text",
+    icon: "/gemini.svg",
   },
 ];
 

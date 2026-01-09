@@ -11,8 +11,8 @@
     "format": "ultracite fix",
     "migrate": "prisma migrate dev",
     "reset": "prisma migrate reset",
-    "prisma:generate": "prisma generate",
-    "prisma:studio": "prisma studio",
+    "generate": "prisma generate",
+    "studio": "prisma studio",
     "inngest:dev": "inngest-cli dev",
     "dev:all": "mprocs"
   },

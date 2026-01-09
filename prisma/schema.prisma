@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "./src/generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -92,6 +92,9 @@ enum NodeType {
   MANUAL_TRIGGER
   HTTP_REQUEST
   GOOGLE_FORM_TRIGGER
+  GEMINI
+  DEEPSEEK
+  OPENAI
 }
 
 model Node {

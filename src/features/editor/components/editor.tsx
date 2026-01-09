@@ -22,7 +22,7 @@ import "@xyflow/react/dist/style.css";
 import { useSetAtom } from "jotai";
 import { useCallback, useMemo, useState } from "react";
 import { nodeComponents } from "@/config/node-components";
-import { NodeType } from "@/generated/prisma";
+import { NodeType } from "@/generated/prisma/enums";
 import { editorAtom } from "../store/atoms";
 import { AddNodeButton } from "./add-node-button";
 import ExecuteWorkflowButton from "./execute-workflow-button";
