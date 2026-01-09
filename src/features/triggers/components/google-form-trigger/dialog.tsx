@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { generateGoogleFormScript } from "./utils";
 
 type GoogleFormTriggerDialogProps = {
   open: boolean;
@@ -82,8 +83,15 @@ export const GoogleFormTriggerDialog = ({
             <h4 className="font-medium text-sm">Google Apps Script:</h4>
             <Button
               onClick={async () => {
-                await navigator.clipboard.writeText("googleAppsScript");
-                toast.success("Google Apps Script copied to clipboard!");
+                const script = generateGoogleFormScript(webhookUrl);
+                try {
+                  await navigator.clipboard.writeText(script);
+                  toast.success("Google Apps Script copied to clipboard!");
+                } catch {
+                  toast.error(
+                    "Failed to copy Google Apps Script to clipboard."
+                  );
+                }
               }}
               type="button"
               variant="outline"

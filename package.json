@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "ultracite check",
+    "ngrok": "ngrok http --url=subarytenoidal-hilda-shockingly.ngrok-free.dev 3000",
     "format": "ultracite fix",
     "migrate": "prisma migrate dev",
     "reset": "prisma migrate reset",
