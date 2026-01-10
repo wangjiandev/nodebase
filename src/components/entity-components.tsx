@@ -269,6 +269,7 @@ export const EntityItem = ({
   subtitle,
   onRemove,
   isRemoving,
+  image,
 }: EntityItemProps) => {
   const handleRemove = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -286,6 +287,8 @@ export const EntityItem = ({
         <ItemMedia variant="icon">
           {isRemoving ? (
             <Spinner className="size-5" />
+          ) : image ? (
+            image
           ) : (
             <Workflow className="size-5" />
           )}

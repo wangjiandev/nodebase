@@ -39,7 +39,8 @@
       "style": {
         "useBlockStatements": "off",
         "noMagicNumbers": "off",
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "noNestedTernary": "off"
       },
       "nursery": {
         "noReactForwardRef": "off",

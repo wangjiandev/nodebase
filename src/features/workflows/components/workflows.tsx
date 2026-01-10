@@ -15,7 +15,6 @@ import {
   ErrorView,
   LoadingView,
 } from "@/components/entity-components";
-import type { Workflow } from "@/generated/prisma";
 import { useEntitySearch } from "@/hooks/use-entity-search";
 import {
   useCreateWorkflow,
@@ -23,6 +22,7 @@ import {
   useSuspenseWorkflows,
 } from "../hooks/use-workflows";
 import { useWorkflowsParams } from "../hooks/use-workflows-params";
+import type { WorkflowsGetMany } from "../types";
 
 export const WorkflowList = () => {
   const workflows = useSuspenseWorkflows();
@@ -36,7 +36,7 @@ export const WorkflowList = () => {
   );
 };
 
-export const WorkflowItem = ({ workflow }: { workflow: Workflow }) => {
+export const WorkflowItem = ({ workflow }: { workflow: WorkflowsGetMany }) => {
   const deleteWorkflow = useDeleteWorkflow();
 
   const deleteHandler = () => {
