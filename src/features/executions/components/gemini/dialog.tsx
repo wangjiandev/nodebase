@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
@@ -32,6 +33,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useCredentialsByType } from "@/features/credentials/hooks/use-credentials";
+import { CredentialType } from "@/generated/prisma/enums";
 
 export const AVAILABLE_MODELS = [
   "gemini-2.0-flash",
@@ -50,6 +53,7 @@ const formSchema = z.object({
       "Variable name must start with a letter or underscore and contain only letters, numbers, and underscores"
     ),
   model: z.string().min(1, "Model is required"),
+  credentialId: z.string().min(1, "Credential ID is required"),
   systemPrompt: z.string().optional(),
   userPrompt: z.string().min(1, "User prompt is required"),
 });
@@ -69,11 +73,15 @@ export const GeminiDialog = ({
   onSubmit,
   defaultValues = {},
 }: GeminiProps) => {
+  const { data: credentials, isLoading: isLoadingCredentials } =
+    useCredentialsByType(CredentialType.GEMINI);
+
   const form = useForm<GeminiFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       variableName: defaultValues.variableName || "",
       model: defaultValues.model || AVAILABLE_MODELS[0],
+      credentialId: defaultValues.credentialId || "",
       systemPrompt: defaultValues.systemPrompt || "",
       userPrompt: defaultValues.userPrompt || "",
     },
@@ -84,6 +92,7 @@ export const GeminiDialog = ({
       form.reset({
         variableName: defaultValues.variableName || "",
         model: defaultValues.model || AVAILABLE_MODELS[0],
+        credentialId: defaultValues.credentialId || "",
         systemPrompt: defaultValues.systemPrompt || "",
         userPrompt: defaultValues.userPrompt || "",
       });
@@ -123,6 +132,45 @@ export const GeminiDialog = ({
                   <FormDescription>
                     Use this name to reference the result in other nodes:{" "}
                     {`{{${watchVariableName}.text}}`}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="credentialId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Gemini Credential</FormLabel>
+                  <Select
+                    defaultValue={field.value}
+                    disabled={isLoadingCredentials || credentials?.length === 0}
+                    onValueChange={field.onChange}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a Credential" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {credentials?.map((credential) => (
+                        <SelectItem key={credential.id} value={credential.id}>
+                          <div className="flex items-center gap-2">
+                            <Image
+                              alt={credential.name}
+                              height={16}
+                              src="/gemini.svg"
+                              width={16}
+                            />
+                            <span>{credential.name}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Gemini model to use for text generation.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
